@@ -34,7 +34,9 @@ jobs:
 
       - name: Cargo check (fast feedback)
         shell: bash
-        run: cd src-tauri && cargo check 2>&1 | tail -30
+        run: |
+          npx vite build
+          cd src-tauri && cargo check 2>&1 | tail -30
 
       - name: Build Tauri app (Windows)
         uses: tauri-apps/tauri-action@v0
