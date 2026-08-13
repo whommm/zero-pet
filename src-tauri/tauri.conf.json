@@ -29,6 +29,7 @@
     },
     "bundle": {
       "active": true,
+      "identifier": "com.whommm.zeropet",
       "category": "Entertainment",
       "shortDescription": "零的桌宠",
       "longDescription": "Live2D 桌宠 + AI 聊天，连接 QQ Bot Gateway",
