@@ -24,6 +24,18 @@ jobs:
       - name: Install frontend deps
         run: npm ci
 
+      - name: Debug tauri features
+        shell: bash
+        run: |
+          cd src-tauri
+          cargo tree -e features -p tauri 2>&1 | grep -E "^tauri|system-tray|tray-icon" | head -20
+          echo '--- tauri version ---'
+          cargo tree -p tauri 2>&1 | head -3
+
+      - name: Cargo check (fast feedback)
+        shell: bash
+        run: cd src-tauri && cargo check 2>&1 | tail -30
+
       - name: Build Tauri app (Windows)
         uses: tauri-apps/tauri-action@v0
         env:
