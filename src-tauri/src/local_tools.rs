@@ -6,6 +6,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
+use image::GenericImageView;
 use serde_json::{json, Value};
 
 /// Windows 上把路径里的正斜杠转成 Windows 反斜杠（仅当路径已含盘符且用户可能输入 / 分隔）
@@ -44,21 +45,21 @@ pub fn local_screenshot(full: Option<bool>) -> Value {
     let result = (|| -> Result<String, String> {
         let screenshots = screenshots::Screen::all().map_err(|e| format!("枚举屏幕失败: {e}"))?;
         let (w, h) = if full {
-            let max_x = screenshots.iter().map(|s| s.display_info().x + s.display_info().width).max().unwrap_or(0);
-            let max_y = screenshots.iter().map(|s| s.display_info().y + s.display_info().height).max().unwrap_or(0);
+            let max_x = screenshots.iter().map(|s| s.display_info.x as i32 + s.display_info.width as i32).max().unwrap_or(0);
+            let max_y = screenshots.iter().map(|s| s.display_info.y as i32 + s.display_info.height as i32).max().unwrap_or(0);
             (max_x as u32, max_y as u32)
         } else {
-            let primary = screenshots.iter().find(|s| s.display_info().is_primary)
+            let primary = screenshots.iter().find(|s| s.display_info.is_primary)
                 .or_else(|| screenshots.first())
                 .ok_or("没有可用屏幕")?;
-            (primary.display_info().width, primary.display_info().height)
+            (primary.display_info.width, primary.display_info.height)
         };
         let mut image = image::RgbaImage::new(w, h);
         for s in &screenshots {
-            let info = s.display_info();
+            let info = &s.display_info;
             if full || info.is_primary {
                 let img = s.capture().map_err(|e| format!("截屏失败: {e}"))?;
-                let (ox, oy) = (info.x as i32, info.y as i32);
+                let (ox, oy) = (info.x, info.y);
                 for (x, y, p) in img.enumerate_pixels() {
                     let dx = x as i32 - ox;
                     let dy = y as i32 - oy;
@@ -176,9 +177,10 @@ pub fn local_clipboard(action: String, content: Option<String>) -> Value {
         },
         "write" => {
             let text = content.unwrap_or_default();
+            let bytes = text.len();
             match arboard::Clipboard::new() {
                 Ok(mut cb) => match cb.set_text(text) {
-                    Ok(()) => json!({"ok": true, "bytes": text.len()}),
+                    Ok(()) => json!({"ok": true, "bytes": bytes}),
                     Err(e) => json!({"ok": false, "error": format!("写剪贴板失败: {e}")}),
                 },
                 Err(e) => json!({"ok": false, "error": format!("打开剪贴板失败: {e}")}),
