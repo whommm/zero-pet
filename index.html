@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>零的桌宠 · Desktop Pet</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(135deg, #0f1024 0%, #1a1a3e 100%);
+    color: #e8e8f0;
+    height: 100vh; overflow: hidden;
+  }
+  #app { display: flex; height: 100vh; }
+  /* 左：live2d 舞台 */
+  #stage {
+    flex: 1; position: relative; background: radial-gradient(ellipse at 50% 80%, #2a2a5e88 0%, transparent 70%);
+  }
+  #stage canvas { display: block; }
+  #current-emotion {
+    position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
+    background: rgba(0,0,0,0.5); padding: 6px 14px; border-radius: 20px;
+    font-size: 13px; color: #c8b8ff; border: 1px solid #6b5bd033;
+  }
+  /* 右：聊天面板 */
+  #panel {
+    width: 380px; display: flex; flex-direction: column;
+    background: rgba(20, 20, 44, 0.9); border-left: 1px solid #333366;
+  }
+  #panel-head {
+    padding: 12px 16px; display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid #2a2a55; font-size: 14px;
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .dot.green { background: #4ade80; box-shadow: 0 0 8px #4ade80; }
+  .dot.red { background: #f87171; box-shadow: 0 0 8px #f87171; }
+  #chat-box {
+    flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px;
+  }
+  .msg { max-width: 85%; padding: 9px 12px; border-radius: 12px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+  .msg.user { align-self: flex-end; background: #4c6ef5; border-bottom-right-radius: 4px; }
+  .msg.assistant { align-self: flex-start; background: #2a2a55; border-bottom-left-radius: 4px; }
+  #panel-foot { display: flex; gap: 8px; padding: 12px; border-top: 1px solid #2a2a55; }
+  #chat-input {
+    flex: 1; background: #1a1a3e; border: 1px solid #333366; border-radius: 20px;
+    padding: 10px 16px; color: #e8e8f0; font-size: 14px; outline: none;
+  }
+  #chat-input:focus { border-color: #4c6ef5; }
+  #send-btn {
+    background: #4c6ef5; border: none; border-radius: 20px; padding: 0 20px;
+    color: #fff; font-size: 14px; cursor: pointer;
+  }
+  #send-btn:hover { background: #5c7cfa; }
+  #status {
+    position: fixed; bottom: 8px; left: 8px; z-index: 999;
+    font-family: monospace; font-size: 11px; color: #888;
+    background: rgba(0,0,0,0.6); padding: 6px 10px; border-radius: 6px;
+    max-width: 400px; max-height: 140px; overflow: hidden; white-space: pre-wrap;
+    opacity: 0.7;
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="stage">
+    <canvas id="l2d-canvas"></canvas>
+    <div id="current-emotion">😌 待机中</div>
+  </div>
+  <div id="panel">
+    <div id="panel-head">
+      <span class="dot red" id="conn-dot"></span>
+      <span id="conn-text">连接中…</span>
+      <span style="flex:1"></span>
+      <span style="font-size:12px;color:#888">零 · 桌宠</span>
+    </div>
+    <div id="chat-box"></div>
+    <div id="panel-foot">
+      <input id="chat-input" placeholder="跟零说点什么…" />
+      <button id="send-btn">发送</button>
+    </div>
+  </div>
+</div>
+<div id="status">初始化…</div>
+<script src="/assets/live2dcubismcore.min.js"></script>
+<script src="/assets/live2d.min.js"></script>
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>
