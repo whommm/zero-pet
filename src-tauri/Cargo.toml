@@ -16,6 +16,10 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 log = "0.4"
 tokio = { version = "1", features = ["macros"] }
+screenshots = "0.8"
+image = "0.24"
+arboard = "3"
+dirs = "5"
 
 [features]
 # by default Tauri runs in production mode

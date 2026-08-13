@@ -5,6 +5,8 @@ use tauri::{
     CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem,
 };
 
+mod local_tools;
+
 fn main() {
     // 系统托盘：显示 / 隐藏 / 退出
     let show_item = CustomMenuItem::new("show", "显示/隐藏");
@@ -16,6 +18,13 @@ fn main() {
     let tray = SystemTray::new().with_menu(tray_menu);
 
     tauri::Builder::default()
+        .invoke_handler(tauri::generate_handler![
+            local_tools::local_open_app,
+            local_tools::local_screenshot,
+            local_tools::local_file,
+            local_tools::local_clipboard,
+            local_tools::local_notify,
+        ])
         .system_tray(tray)
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::LeftClick { .. } => {

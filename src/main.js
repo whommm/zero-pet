@@ -125,7 +125,7 @@ client.on('chat.stream.chunk', (p) => {
 });
 
 client.on('chat.stream.end', () => {
-  streamMsgEl = null;
+  // 不置空 streamMsgEl：chat.message 会紧随其后补全内容并清理
 });
 
 client.on('chat.message', (p) => {
@@ -143,11 +143,11 @@ client.on('chat.thinking', (p) => {
 });
 
 client.on('media.show', (p) => {
-  if (p && p.media_type === 'voice' && p.path) {
-    // 从 gateway 静态服务拉音频（M2 时改成 HTTP 短时 URL）
+  if (p && p.media_type === 'voice' && (p.url || p.path)) {
+    // 优先用 gateway 提供的完整 URL（PUBLIC_FILE_BASE），否则退回本地 /media 静态路径
     const audio = new Audio();
-    audio.src = '/media/' + p.path.replace(/^generated\//, '');
-    audio.play().catch(() => log('音频播放失败（静态服务未挂载）'));
+    audio.src = p.url || ('/media/' + p.path.replace(/^generated\//, ''));
+    audio.play().catch(() => log('音频播放失败：' + audio.src));
   }
 });
 

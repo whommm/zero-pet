@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "tools": [
+    {
+      "tool": "desktop.open_app",
+      "description": "用默认程序打开本地应用/文件/URL",
+      "args": { "target": "string", "args": ["string"] },
+      "confirm": false,
+      "examples": ["打开浏览器", "打开 D:/资料/报告.pdf", "打开 https://github.com"]
+    },
+    {
+      "tool": "desktop.screenshot",
+      "description": "截取本地屏幕（全屏或主屏），返回图片",
+      "args": { "full": "boolean" },
+      "confirm": false,
+      "examples": ["截屏", "截全屏"]
+    },
+    {
+      "tool": "desktop.file",
+      "description": "本地文件操作：list 列目录 / read 读文件 / write 写文件",
+      "args": { "action": "list|read|write", "path": "string", "content": "string?" },
+      "confirm": true,
+      "confirm_scope": ["write"],
+      "examples": ["看看桌面有什么", "读 C:/Users/han/Desktop/notes.txt", "写文件到桌面"]
+    },
+    {
+      "tool": "desktop.clipboard",
+      "description": "读/写本地剪贴板",
+      "args": { "action": "read|write", "content": "string?" },
+      "confirm": false,
+      "examples": ["读剪贴板", "复制这段到剪贴板"]
+    },
+    {
+      "tool": "desktop.notify",
+      "description": "弹出本地系统通知",
+      "args": { "title": "string?", "body": "string" },
+      "confirm": false,
+      "examples": ["提醒我喝水", "通知我下载完成"]
+    }
+  ]
+}

@@ -41,6 +41,25 @@ npx tauri build  # 打包 exe/msi
 | `ws` URL 参数 | 覆盖默认连接地址（默认 `ws://192.168.2.108:8010/ws/desktop`） |
 | `token` URL 参数 | 覆盖默认 token |
 
+## 本地电脑工具（桌宠 = AI 的手和眼）
+
+桌宠（Tauri 版）连接后，AI 可以操作你的本地电脑。服务器端已有配套实现（pi-gateway `desktop_channel.py` / `tool_service.py` / `extensions/qq-tools.ts`，2026-08-13 起）。
+
+可用工具（`local-tools/tools.json` 是能力清单）：
+
+| 工具 | 能力 | 安全策略 |
+|------|------|----------|
+| `desktop.open_app` | 打开应用/文件/URL | 直接执行 |
+| `desktop.screenshot` | 截屏（主屏/全屏） | 直接执行 |
+| `desktop.file` | 列目录/读/写文件 | **写文件弹窗确认** |
+| `desktop.clipboard` | 读/写剪贴板 | 直接执行 |
+| `desktop.notify` | 本地系统通知 | 直接执行 |
+
+## 构建与发布
+
+- 本地构建：`npm install && npx tauri build`（Windows 出 nsis/msi 安装包）
+- 自动构建：推代码到 GitHub 触发 `.github/workflows/build.yml`，在 Release 页下载 Windows 安装包
+
 ## 通信协议
 
 照 live2dagent 的 WS 协议：
