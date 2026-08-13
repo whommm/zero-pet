@@ -19,9 +19,7 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@stable
 
-      - uses: swatinem/rust-cache@v2
-        with:
-          workspaces: './src-tauri -> target'
+      # 注意：不用 swatinem/rust-cache——曾因恢复旧 tauri 产物导致 SystemTray 未导出编译失败
 
       - name: Install frontend deps
         run: npm ci
