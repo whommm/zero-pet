@@ -27,6 +27,9 @@
         "open": true
       }
     },
+    "systemTray": {
+      "iconPath": "icons/32x32.png"
+    },
     "bundle": {
       "active": true,
       "identifier": "com.whommm.zeropet",
